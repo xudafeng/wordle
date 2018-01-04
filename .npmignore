@@ -1,0 +1,8 @@
+.travis.yml
+test/
+coverage/
+screenshots/
+reports/
+*.html
+*.sw*
+*.un~
