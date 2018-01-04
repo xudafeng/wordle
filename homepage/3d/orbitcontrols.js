@@ -1,6 +1,6 @@
 'use strict';
 
-import Hilo3d from 'Hilo3d';
+import Hilo3d from 'hilo3d';
 
 var tempEuler = new Hilo3d.Euler();
 tempEuler.order = 'XYZ';

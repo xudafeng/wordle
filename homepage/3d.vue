@@ -2,7 +2,6 @@
   <layout>
     <article class="container">
       <div id="container"></div>
-      <canvas id="canvas" width="375" height="667"></canvas>
       <wordcloud
         :data="words"
         nameKey="name"
@@ -29,9 +28,7 @@ export default {
     }
   },
   mounted() {
-    setTimeout(() => {
-      render();
-    }, 1000);
+    render();
   },
   methods: {
     generateWords() {
@@ -79,4 +76,3 @@ export default {
 <style lang="less">
 @import '../assets/base.less';
 </style>
-

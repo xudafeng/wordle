@@ -1,94 +1,72 @@
 'use strict';
 
-import Hilo3d from 'Hilo3d';
+import Hilo3d from 'hilo3d';
 
 const Stats = require('./stats');
 const OrbitControls = require('./orbitcontrols');
 
 module.exports = () => {
-  var camera = new Hilo3d.PerspectiveCamera({
-    aspect: innerWidth / innerHeight,
+  const stageWidth = parseInt(getComputedStyle(document.querySelector('#container')).width);
+  const stageHeight = parseInt(innerHeight);
+
+  const camera = new Hilo3d.PerspectiveCamera({
+    aspect: stageWidth / stageHeight,
     far: 100,
     near: 0.1,
     z: 3
   });
-  var stage = new Hilo3d.Stage({
+
+  const stage = new Hilo3d.Stage({
     container: document.querySelector('#container'),
     camera: camera,
-    clearColor: new Hilo3d.Color(0.4, 0.4, 0.4),
-    width: innerWidth,
-    height: innerHeight
+    clearColor: new Hilo3d.Color(1, 1, 1),
+    width: stageWidth,
+    height: stageHeight,
+    pixelRatio: 1
   });
 
-  new Hilo3d.DirectionalLight({
-    color: new Hilo3d.Color(1, 1, 1),
-    direction: new Hilo3d.Vector3(0, -1, 0)
-  }).addTo(stage);
-
-  new Hilo3d.AmbientLight({
-    color: new Hilo3d.Color(1, 1, 1),
-    amount: 0.5
-  }).addTo(stage);
-
-  var ticker = new Hilo3d.Ticker(60);
+  const ticker = new Hilo3d.Ticker(60);
   ticker.addTick(stage);
-  ticker.addTick(Hilo3d.Tween);
-  ticker.addTick(Hilo3d.Animation);
+  ticker.start(true);
+
   new Stats(ticker, stage.renderer.renderInfo);
   new OrbitControls(stage, {
     isLockMove: true
   });
 
-  setTimeout(function() {
-    ticker.start(true);
-  }, 10);
+  setTimeout(() => {
+    const svgElem = document.querySelector('.wordCloud svg');
+    const svgGElem = document.querySelector('.wordCloud svg g');
 
-  const html = document.querySelector('.wordCloud svg').innerHTML;
-  var data = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-    ${html}
-    </svg>
-  `;
+    var data = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="${svgGElem.getAttribute('width')}" height="${svgGElem.getAttribute('height')}">
+      ${svgElem.innerHTML}
+      </svg>
+    `;
 
-  var canvas = document.querySelector('#canvas');
-  var ctx = canvas.getContext('2d');
+    const DOMURL = window.URL || window.webkitURL || window;
+    const svg = new Blob([data], {
+      type: 'image/svg+xml;charset=utf-8'
+    });
+    const url = DOMURL.createObjectURL(svg);
 
-  var DOMURL = window.URL || window.webkitURL || window;
-
-  var img = new Image();
-  img.crossOrigin = 'anonymous';
-  var svg = new Blob([data], {
-    type: 'image/svg+xml;charset=utf-8'
-  });
-  var url = DOMURL.createObjectURL(svg);
-
-  img.onload = function () {
-    ctx.drawImage(img, 0, 0);
-    DOMURL.revokeObjectURL(url);
-  };
-
-  img.src = url;
-
-  setTimeout(function() {
-    var container = new Hilo3d.Node();
-
-    var geometry = new Hilo3d.SphereGeometry({
+    const geometry = new Hilo3d.SphereGeometry({
       radius: 1,
       heightSegments: 32,
       widthSegments: 64
     });
-    var material = new Hilo3d.BasicMaterial({
-      lightType: 'NONE',
-      diffuse: new Hilo3d.Texture({
-        image: canvas
-      }),
-      wireframe: false
+
+    const material = new Hilo3d.BasicMaterial({
+      transparent: true,
+      diffuse: new Hilo3d.LazyTexture({
+        src: url
+      })
     });
-    var mesh = new Hilo3d.Mesh({
+
+    new Hilo3d.Mesh({
+      rotationY: 90,
       geometry: geometry,
       material: material
-    });
-    container.addChild(mesh);
-    stage.addChild(container);
-  }, 100);
+    }).addTo(stage);
+  }, 1000);
 };
