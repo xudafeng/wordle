@@ -1,6 +1,6 @@
 'use strict';
 
-import Hilo3d from 'Hilo3d';
+import Hilo3d from 'hilo3d';
 
 const Stats = require('./stats');
 const OrbitControls = require('./orbitcontrols');

@@ -1,3 +1,5 @@
+'use strict';
+
 function Stats(ticker, renderInfo, container) {
   this.renderInfo = renderInfo;
   this.ticker = ticker;
