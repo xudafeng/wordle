@@ -2,10 +2,14 @@
   <layout>
     <article class="container">
       <wordcloud
-        :data="words"
+        :data="generateWords(words)"
         nameKey="name"
         valueKey="value">
       </wordcloud>
+      <textarea
+        v-model="words"
+      >
+      </textarea>
       <button @click="onClick">refresh</button>
     </article>
   </layout>
@@ -23,13 +27,13 @@ export default {
     layout: Layout,
     wordcloud
   },
-  computed: {
-    words() {
-      return this.generateWords();
+  data() {
+    return {
+      words: words.trim()
     }
   },
   methods: {
-    generateWords() {
+    generateWords(words) {
       return words.split(/\s+/g).filter(item => {
         return item;
       }).map(item => {
@@ -47,4 +51,16 @@ export default {
 </script>
 <style lang="less">
 @import '../assets/base.less';
+
+.container {
+  text-align: center;
+
+  textarea {
+    width: 100%;
+    min-height: 240px;
+    border: 1px solid #eee;
+    color: #111;
+    margin-bottom: 10px;
+  }
+}
 </style>

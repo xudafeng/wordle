@@ -1,14 +1,11 @@
 {
   "name": "wordle",
   "description": "wordle based on Vue",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "keywords": [
     "vue",
-    "responsive",
-    "layout",
-    "layout component",
-    "ui component",
     "ui",
+    "wordle",
     "component"
   ],
   "scripts": {
