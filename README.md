@@ -22,6 +22,7 @@ wordle based on [Vue](//github.com/vuejs/vue).
 
 - [Common Edition](https://xudafeng.github.io/wordle/)
 - [3D Edition](https://xudafeng.github.io/wordle/3d.html)
+- [More Datavis](//xudafeng.github.io/slide/archives/datavis/)
 
 ## Thank To
 
